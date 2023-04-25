@@ -1,0 +1,237 @@
+{
+	"info": {
+		"_postman_id": "a37e0ab3-7d4c-47d8-ac32-8cc03faef8bb",
+		"name": "URLShortner_API_Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25604143"
+	},
+	"item": [
+		{
+			"name": "List_All_URLs",
+			"item": [
+				{
+					"name": "List_All_Short_URLs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Assert that response type is JSON\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(typeof(body)).is.be.equal(\"object\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petyasshorturl.petyazh29.repl.co/api/urls",
+							"protocol": "https",
+							"host": [
+								"petyasshorturl",
+								"petyazh29",
+								"repl",
+								"co"
+							],
+							"path": [
+								"api",
+								"urls"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check_Create_Function",
+			"item": [
+				{
+					"name": "Create_New_URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"  \r",
+									"    const respBody = pm.response.json();\r",
+									"    pm.environment.set(\"shortCode\", respBody.url.shortCode);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\": \"https://alex.com\",\r\n    \"shortCode\": \"alex\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://petyasshorturl.petyazh29.repl.co/api/urls",
+							"protocol": "https",
+							"host": [
+								"petyasshorturl",
+								"petyazh29",
+								"repl",
+								"co"
+							],
+							"path": [
+								"api",
+								"urls"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search_URL_by_ShortCode Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check the ShortCode\", function (){\r",
+									"    const body  = pm.response.json();\r",
+									"    pm.expect(body.shortCode).to.be.equal(\"alex\")\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petyasshorturl.petyazh29.repl.co/api/urls/{{shortCode}}",
+							"protocol": "https",
+							"host": [
+								"petyasshorturl",
+								"petyazh29",
+								"repl",
+								"co"
+							],
+							"path": [
+								"api",
+								"urls",
+								"{{shortCode}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Try_To_Create_Duplicate_URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\": \"https://nakov.com\",\r\n    \"shortCode\": \"nak\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://petyasshorturl.petyazh29.repl.co/api/urls",
+							"protocol": "https",
+							"host": [
+								"petyasshorturl",
+								"petyazh29",
+								"repl",
+								"co"
+							],
+							"path": [
+								"api",
+								"urls"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check_Delete_option",
+			"item": [
+				{
+					"name": "Delete_URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert that URL is deleted\", function (){\r",
+									"    const body  = pm.response.json();\r",
+									"    pm.expect(body.msg).to.be.equal(\"URL deleted: alex\")\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://petyasshorturl.petyazh29.repl.co/api/urls/{{shortCode}}",
+							"protocol": "https",
+							"host": [
+								"petyasshorturl",
+								"petyazh29",
+								"repl",
+								"co"
+							],
+							"path": [
+								"api",
+								"urls",
+								"{{shortCode}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
